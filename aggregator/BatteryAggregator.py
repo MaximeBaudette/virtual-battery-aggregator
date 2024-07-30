@@ -68,7 +68,7 @@ class BatteryAggregator:
             df_models = df_models.reset_index().melt('Model', var_name='Parameter').loc[bad_values['value']]
             raise Exception(f'Error parsing battery parameter values: {df_models.iloc[:5]}')
 
-        self.models = self.models.append(df_models, sort=False)
+        self.models = pd.concat([self.models, df_models], sort=False).drop_duplicates()
 
     def make_opt_problem(self):
         # set up an optimization problem to dispatch a virtual battery power setpoint to individual batteries\
